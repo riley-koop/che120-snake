@@ -7,14 +7,15 @@
 import random, pygame, sys              #CW: The modules random, pygame, and sys are imported into the file namespace
 from pygame.locals import *             #CW: All the contents of the modulepygames.local are imported into the namespace
 
-FPS = 15                                #CW: The value of 15 is assigned to the variable name of FPS
-WINDOWWIDTH = 840                       #CW: The value of 840 is assigned to the varible name WINDOWWIDTH
-WINDOWHEIGHT = 680                      #CW: The value of 840 is assigned to the varible name 
-CELLSIZE = 20                       
-assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
-assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
-CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
-CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
+FPS = 15                                #CW: The value of 15 is assigned to the variable name of FPS.
+WINDOWWIDTH = 840                       #CW: The value of 840 is assigned to the varible name WINDOWWIDTH.
+WINDOWHEIGHT = 680                      #CW: The value of 840 is assigned to the varible name WINDOWHEIGHT.
+CELLSIZE = 20                           #CW: The value of 20 is assigned to the varible name CELLSIZE.
+assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."             #CW: To ensure the window width is a multiple of the cell size, the remainder of the width divided by the cell size must be 0. By using assert, as long as the statement is true, the function will run. However, if the statement is false, then the program will raise an error. The value must be a multiple in order for the display to work properly. 
+assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."           #CW: The same steps are followed as above. However, this ensures that the height is a multiple of the cell size, ensuring that the display works properly.
+CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)                 #CW: To calculate the correct width of each cell, the width is divided by the cell size. In order to provide an integer output, the float output is converted to an integer. The result is assigned to the variable name CELLWIDTH.
+CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)               #CW: The same procedure is carried out as above, however, the height is calculated and assigned to CELLHEIGHT.
+
 
 #             R    G    B
 WHITE     = (255, 255, 255)
