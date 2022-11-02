@@ -16,7 +16,7 @@ assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell s
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)                 #CW: To calculate the correct width of each cell, the width is divided by the cell size. In order to provide an integer output, the float output is converted to an integer. The result is assigned to the variable name CELLWIDTH.
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)               #CW: The same procedure is carried out as above, however, the height is calculated and assigned to CELLHEIGHT.
 
-#New comment
+#New comment here is my work NO Yes
 #             R    G    B
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
