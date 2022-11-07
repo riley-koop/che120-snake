@@ -3,6 +3,7 @@
 
 #Christopher van der Walt (21011000): CW
 # Riley Koop (21013070): RK
+#Matthieu Lavallee (21035855): ML
 
 import random, pygame, sys              #CW: The modules random, pygame, and sys are imported into the file namespace
 from pygame.locals import *             #CW: All the contents of the modulepygames.local are imported into the namespace
@@ -83,7 +84,7 @@ def runGame():
             if wormBody['x'] == wormCoords[HEAD]['x'] and wormBody['y'] == wormCoords[HEAD]['y']:
                 return # game over
 
-        # check if worm has eaten an apply
+        # check if worm has eaten an apple
         if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']:
             # don't remove worm's tail segment
             apple = getRandomLocation() # set a new apple somewhere
@@ -162,24 +163,26 @@ def terminate():
     sys.exit()
 
 
+#ML This function generates a random location within the cell.
 def getRandomLocation():
     return {'x': random.randint(0, CELLWIDTH - 1), 'y': random.randint(0, CELLHEIGHT - 1)}
 
 
+#ML This function shows the Game Over screen when activated
 def showGameOverScreen():
-    gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
-    gameSurf = gameOverFont.render('Game', True, WHITE)
-    overSurf = gameOverFont.render('Over', True, WHITE)
-    gameRect = gameSurf.get_rect()
-    overRect = overSurf.get_rect()
-    gameRect.midtop = (WINDOWWIDTH / 2, 10)
-    overRect.midtop = (WINDOWWIDTH / 2, gameRect.height + 10 + 25)
+    gameOverFont = pygame.font.Font('freesansbold.ttf', 150) #ML defines the font and size
+    gameSurf = gameOverFont.render('Game', True, WHITE) #ML defines the font and size for the word 'Game'
+    overSurf = gameOverFont.render('Over', True, WHITE) #ML defines the font and size for the word 'Over'
+    gameRect = gameSurf.get_rect() #ML Returns a rectangle with the word "Game"
+    overRect = overSurf.get_rect() #ML Returns a rectangle with the word "Over"
+    gameRect.midtop = (WINDOWWIDTH / 2, 10) #ML Defines the height and width of the rectangle for "Game"
+    overRect.midtop = (WINDOWWIDTH / 2, gameRect.height + 10 + 25) #ML Defines the height and width of the rectangle for "Over"
 
-    DISPLAYSURF.blit(gameSurf, gameRect)
-    DISPLAYSURF.blit(overSurf, overRect)
-    drawPressKeyMsg()
-    pygame.display.update()
-    pygame.time.wait(500)
+    DISPLAYSURF.blit(gameSurf, gameRect) #ML Displays "Game" on the screen
+    DISPLAYSURF.blit(overSurf, overRect) #ML Displays "Over" on the screen 
+    drawPressKeyMsg() #ML Displays "Press a key to play."
+    pygame.display.update() 
+    pygame.time.wait(500) 
     checkForKeyPress() # clear out any key presses in the event queue
 
     while True:
