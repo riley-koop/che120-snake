@@ -1,9 +1,9 @@
 # Wormy, by Al Sweigart al@inventwithpython.com
 # (Pygame) Lead the green snake around the screen eating red apples.
 
-#Christopher van der Walt (21011000): CW
+# Christopher van der Walt (21011000): CW
 # Riley Koop (21013070): RK
-#Matthieu Lavallee (21035855): ML
+# Matthieu Lavallee (21035855): ML
 
 import random, pygame, sys              #CW: The modules random, pygame, and sys are imported into the file namespace
 from pygame.locals import *             #CW: All the contents of the modulepygames.local are imported into the namespace
@@ -183,18 +183,19 @@ def showGameOverScreen():
     drawPressKeyMsg() #ML Displays "Press a key to play."
     pygame.display.update() 
     pygame.time.wait(500) 
-    checkForKeyPress() # clear out any key presses in the event queue
+    checkForKeyPress() #ML Clears out any key presses in the event queue
 
     while True:
         if checkForKeyPress():
             pygame.event.get() # clear event queue
             return
 
+#Ml This function displays the score
 def drawScore(score):
-    scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE)
+    scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE) #ML Sets the font and color of the score display
     scoreRect = scoreSurf.get_rect()
-    scoreRect.topleft = (WINDOWWIDTH - 120, 10)
-    DISPLAYSURF.blit(scoreSurf, scoreRect)
+    scoreRect.topleft = (WINDOWWIDTH - 120, 10) #ML Sets the location of the score display (top left corner)
+    DISPLAYSURF.blit(scoreSurf, scoreRect) #Displays the score
 
 
 def drawWorm(wormCoords):
