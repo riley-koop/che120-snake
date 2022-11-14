@@ -17,36 +17,35 @@ assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell s
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)                 #CW: To calculate the correct width of each cell, the width is divided by the cell size. In order to provide an integer output, the float output is converted to an integer. The result is assigned to the variable name CELLWIDTH.
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)               #CW: The same procedure is carried out as above, however, the height is calculated and assigned to CELLHEIGHT.
 
-#New comment here is my work NO Yes
 #             R    G    B
-WHITE     = (255, 255, 255)
-BLACK     = (  0,   0,   0)
-RED       = (255,   0,   0)
+WHITE     = (255, 255, 255)             #CW: The colours are represented as a numerical input of their red, green, and blue intesities, and are assigned to descriptive variable names. So, when a colour is called later within the code, the element will adopt the necessary colours based on pixel intensity of the display
+BLACK     = (  0,   0,   0)             #CW: The same occurs for the following, however with varying numerical values based on different colours
+RED       = (255,   0,   0)             
 GREEN     = (  0, 255,   0)
 DARKGREEN = (  0, 155,   0)
 DARKGRAY  = ( 40,  40,  40)
-BGCOLOR = BLACK
+BGCOLOR = BLACK                         #CW: Here, the data from the memory assigned to the desired colour is called and assigned to the variable name BGCOlOR so that it can be easily changed in one step if need be. The variable BGCOLOR will represent the backgroung colour of the interface 
 
-UP = 'up'
-DOWN = 'down'
+UP = 'up'               #CW: The "up" key is called and reassigned to the variable name of "UP". Thus, the following programming can be more easily completed without the need to call the key "up" each time it is required.
+DOWN = 'down'           #CW: The same occurs for the following key inputs.
 LEFT = 'left'
 RIGHT = 'right'
 
-HEAD = 0 # syntactic sugar: index of the worm's head
+HEAD = 0            #CW: The worm's head is represented by the position of 0. This is what is known as syntactic sugar, a way to make the code more user-friendly and intuituve.
 
-def main():
-    global FPSCLOCK, DISPLAYSURF, BASICFONT
+def main():         #CW: A new function, named main is being defined. The inputs of main are optional. 
+    global FPSCLOCK, DISPLAYSURF, BASICFONT             #CW: Several variables are about to be defined. However, to ensure that they can be accessed throughout the code, not only in the namespace of the function, they are listed as global variables
 
-    pygame.init()
-    FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-    BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
-    pygame.display.set_caption('Wormy')
+    pygame.init()                                       #CW: A constructor is being called for a new class of objects. This means that, whenever an object in this class is created, several variables will be automatically assigned to it. For this, a predefined function from the module "pygame" is being used.
+    FPSCLOCK = pygame.time.Clock()                      #CW: Here, the time is being called to the code with the pre-defined function from the "pygame" module and assigned to the variable FPSCLOCK. This will give the display a basis to work on to know when an element should move. Each instance of movement is referred to as a frame. Thus, the number of frames per second is equivalent to the number of changes within a given timeframe.
+    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))              #CW: The cooridnates of the display of the game is being defined. The variables of WINDOWWIDTH and WINDOWHEIGHT, defined above, are being called as the variables within the coordinates of the function, defined in the "pygame" module.
+    BASICFONT = pygame.font.Font('freesansbold.ttf', 18)                #CW: The font to be displayed is being defined by a function defined in the "pygame" module. This is them assigned to the variable name of BASICFONT
+    pygame.display.set_caption('Wormy')                 #CW: A pre-defined function from the "pygame" module is again being used to define the words displayed on the start screen of the game.
 
-    showStartScreen()
-    while True:
-        runGame()
-        showGameOverScreen()
+    showStartScreen()               #CW: A built-in function is called to ensure that a start screen is displayed when the game is opened.
+    while True:                     #CW: While the if statements created below are satisfied, or are true, the code will do the following.
+        runGame()                   #CW: A built-in function is used to keep the game running.
+        showGameOverScreen()                #CW: Once the criteria to keep the game running are no longer met, the built-in function will display a "game over" screen
 
 # Riley starts commenting here--------------------------------------------------------------------------------
 def runGame():
