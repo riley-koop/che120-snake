@@ -47,119 +47,121 @@ def main():         #CW: A new function, named main is being defined. The inputs
         runGame()                   #CW: A built-in function is used to keep the game running.
         showGameOverScreen()                #CW: Once the criteria to keep the game running are no longer met, the built-in function will display a "game over" screen
 
-# Riley starts commenting here--------------------------------------------------------------------------------
-def runGame():
-    # Set a random start point.
-    startx = random.randint(5, CELLWIDTH - 6)
-    starty = random.randint(5, CELLHEIGHT - 6)
-    wormCoords = [{'x': startx,     'y': starty},
-                  {'x': startx - 1, 'y': starty},
+
+def runGame():      #RK: A new function named 'runGame' is being defined. There are no required inputs associated with this function.
+    startx = random.randint(5, CELLWIDTH - 6)       #RK: at the beginning of the game, the start position of the worm on the x-axis is made to be a random position on the board.
+                                                    #RK: Forcing the random value to be within 5 and CELLWIDTH-6 ensures the worm will be placed within the playing area.
+    starty = random.randint(5, CELLHEIGHT - 6)      #RK: The start position of the worm on the y-axis is made to be a random position on the board.
+                                                    #RK: Forcing the random value to be within 5 and CELLHEIGHT-6 ensures the worm will be placed within the playing area.
+    wormCoords = [{'x': startx,     'y': starty},   #RK: At the beginning of the game, the worm is three pieces long, an array is created to handle worm coordinates, and three block coordinates are placed in it, creating the snake.
+                  {'x': startx - 1, 'y': starty},   
                   {'x': startx - 2, 'y': starty}]
-    direction = RIGHT
+    direction = RIGHT       #RK: At the start of the game, the worm's direction will be to the right.
 
-    # Start the apple in a random place.
-    apple = getRandomLocation()
+   
+    apple = getRandomLocation() #RK: The first apple is created, and its coordinates are assigned randomly somewhere on the map
 
-    while True: # main game loop
-        for event in pygame.event.get(): # event handling loop
-            if event.type == QUIT:
+    while True: # RK: This is the main loop that continuously repeats the code necessary for the game to run properly.  
+        for event in pygame.event.get():    #RK: This loop goes through the different events in the 'queue' of the pygame 'event' library.
+            if event.type == QUIT:          #RK: If the event is of value 'QUIT', run the terminate() function to end the game. 
                 terminate()
-            elif event.type == KEYDOWN:
-                if (event.key == K_LEFT or event.key == K_a) and direction != RIGHT:
-                    direction = LEFT
-                elif (event.key == K_RIGHT or event.key == K_d) and direction != LEFT:
+            elif event.type == KEYDOWN:     #RK: An if statement to check if a key has been pressed.
+                if (event.key == K_LEFT or event.key == K_a) and direction != RIGHT:    #RK: If the left arrow key or the "A" key is pressed and the snake is not moving in the right direction, change the direction of movement to the left.
+                    direction = LEFT                                                    #RK: This prevents a snake moving right from turning back on itself and killing itself.
+                elif (event.key == K_RIGHT or event.key == K_d) and direction != LEFT:  #RK: If the right arrow key or the "D" key is pressed and the snake is not moving in the left direction, change the direction of movement to the right.
                     direction = RIGHT
-                elif (event.key == K_UP or event.key == K_w) and direction != DOWN:
+                elif (event.key == K_UP or event.key == K_w) and direction != DOWN:     #RK: If the up arrow key or the "W" key is pressed and the snake is not moving in the down direction, change the direction of movement to up.
                     direction = UP
-                elif (event.key == K_DOWN or event.key == K_s) and direction != UP:
+                elif (event.key == K_DOWN or event.key == K_s) and direction != UP:     #RK: If the down arrow key or the "S" key is pressed and the snake is not moving in the up direction, change the direction of movement to down.
                     direction = DOWN
-                elif event.key == K_ESCAPE:
+                elif event.key == K_ESCAPE: #RK: If the escape key is pressed, the terminate function is called to end the game.
                     terminate()
 
-        # check if the worm has hit itself or the edge
+        
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:
-            return # game over
-        for wormBody in wormCoords[1:]:
+            return              #RK: Check to see if the head of the worm has hit any of the four edges of the map. If the snake is off the map, end the game.
+        for wormBody in wormCoords[1:]:     #RK: A loop to check the coordinates of each piece of the snake body except for the head.
             if wormBody['x'] == wormCoords[HEAD]['x'] and wormBody['y'] == wormCoords[HEAD]['y']:
-                return # game over
+                return          #RK: Check to see if the head of the worm has hit any of the body blocks of the snake. If it has, end the game.
 
-        # check if worm has eaten an apple
-        if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']:
-            # don't remove worm's tail segment
-            apple = getRandomLocation() # set a new apple somewhere
+        
+        if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']: #RK: Check to see if the head of the worm has hit an apple and is "eating" it.
+            apple = getRandomLocation()     #RK: Change the position of the apple to another random map location.
+                                            #RK: Note that the tail segment is not being removed. Skipping this step for one iteration of the loop adds creates the illusion that the worm has gained another 'body piece'
         else:
-            del wormCoords[-1] # remove worm's tail segment
+            del wormCoords[-1]              #RK: Remove the end of the snake from the wormCoords array, to create the illusion that the snake is moving.
 
-        # move the worm by adding a segment in the direction it is moving
+                                            #RK: The following lines add a new segment to the front of the snake. When the snake adds a piece in the front and loses one at the end, the snake looks to be moving across the screen, while maintaining its size.
         if direction == UP:
-            newHead = {'x': wormCoords[HEAD]['x'], 'y': wormCoords[HEAD]['y'] - 1}
+            newHead = {'x': wormCoords[HEAD]['x'], 'y': wormCoords[HEAD]['y'] - 1} #RK: If the snake is moving in the up direction, create a new head at the current x position, and one y position less than the current one, because the y-values start at zero at the top of the screen, and increase moving down the screen.
         elif direction == DOWN:
-            newHead = {'x': wormCoords[HEAD]['x'], 'y': wormCoords[HEAD]['y'] + 1}
+            newHead = {'x': wormCoords[HEAD]['x'], 'y': wormCoords[HEAD]['y'] + 1} #RK: If the snake is moving in the down direction, create a new head at the current x position, and one y position greater than the current one
         elif direction == LEFT:
-            newHead = {'x': wormCoords[HEAD]['x'] - 1, 'y': wormCoords[HEAD]['y']}
+            newHead = {'x': wormCoords[HEAD]['x'] - 1, 'y': wormCoords[HEAD]['y']} #RK: If the snake is moving in the left direction, create a new head at one less than the current x position, and the current y position.
         elif direction == RIGHT:
-            newHead = {'x': wormCoords[HEAD]['x'] + 1, 'y': wormCoords[HEAD]['y']}
-        wormCoords.insert(0, newHead)
-        DISPLAYSURF.fill(BGCOLOR)
-        drawGrid()
-        drawWorm(wormCoords)
-        drawApple(apple)
-        drawScore(len(wormCoords) - 3)
-        pygame.display.update()
-        FPSCLOCK.tick(FPS)
+            newHead = {'x': wormCoords[HEAD]['x'] + 1, 'y': wormCoords[HEAD]['y']} #RK: If the snake is moving in the right direction, create a new head at one greater than the current x position, and the current y position.
+        wormCoords.insert(0, newHead)       #RK: Insert the 'newHead' coordinate at the beginning of the 'wormCoords' array. This makes it the head of the snake.
+        DISPLAYSURF.fill(BGCOLOR)           #RK: Make the background or 'display surface', solid black
+        drawGrid()                          #RK: Use the drawgrid() function to draw the grid on the screen
+        drawWorm(wormCoords)                #RK: Use the drawWorm() function to draw the worm on the screen by inputting the current worm coordinates to be drawm.
+        drawApple(apple)                    #RK: Draw the apple by inputting the apple coordinates into the drawApple() function.
+        drawScore(len(wormCoords) - 3)      #RK: Update the score based on the snake length. Since the default start length is 3, only increase the score for each length greater than 3.
+        pygame.display.update()             #RK: Use the built in function to update the game display.
+        FPSCLOCK.tick(FPS)                  #RK: Increase the frame rate of the game by 25 FPS i.e. update the framerate
 
 def drawPressKeyMsg():
-    pressKeySurf = BASICFONT.render('Press a key to play.', True, DARKGRAY)
-    pressKeyRect = pressKeySurf.get_rect()
-    pressKeyRect.topleft = (WINDOWWIDTH - 200, WINDOWHEIGHT - 30)
-    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+    pressKeySurf = BASICFONT.render('Press a key to play.', True, DARKGRAY) #RK: Create a message, and define its properties
+    pressKeyRect = pressKeySurf.get_rect()                                  #RK: Create a rectangle to contain the message    
+    pressKeyRect.topleft = (WINDOWWIDTH - 200, WINDOWHEIGHT - 30)           #RK: Place the message at the given coordinates
+    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)                            #RK: Display the message
 
 
 def checkForKeyPress():
     if len(pygame.event.get(QUIT)) > 0:
-        terminate()
+        terminate()                         #RK: If there are any quit messages in the queue, run the terminate() function to end the game
 
     keyUpEvents = pygame.event.get(KEYUP)
-    if len(keyUpEvents) == 0:
+    if len(keyUpEvents) == 0:               #RK: If no key is pressed on the start screen, do nothing
         return None
-    if keyUpEvents[0].key == K_ESCAPE:
+    if keyUpEvents[0].key == K_ESCAPE:      #RK: If escape key is pressed, end the game and close the window
         terminate()
-    return keyUpEvents[0].key
+    return keyUpEvents[0].key               #RK: return that the escape key was pressed
 
 
 def showStartScreen():
-    titleFont = pygame.font.Font('freesansbold.ttf', 100)
-    titleSurf1 = titleFont.render('Wormy!', True, WHITE, DARKGREEN)
-    titleSurf2 = titleFont.render('Wormy!', True, GREEN)
+    titleFont = pygame.font.Font('freesansbold.ttf', 100)               #RK: Define the font and size to be used for the title
+    titleSurf1 = titleFont.render('Wormy!', True, WHITE, DARKGREEN)     #RK: Create one of the wormy titles to move around the screen
+    titleSurf2 = titleFont.render('Wormy!', True, GREEN)                #RK: Create the other wormy title to move around the screen
 
-    degrees1 = 0
+    degrees1 = 0  #RK: Initial rotation angle of both titles. Start at 0 degrees
     degrees2 = 0
-    while True:
-        DISPLAYSURF.fill(BGCOLOR)
-        rotatedSurf1 = pygame.transform.rotate(titleSurf1, degrees1)
-        rotatedRect1 = rotatedSurf1.get_rect()
-        rotatedRect1.center = (WINDOWWIDTH / 2, WINDOWHEIGHT / 2)
-        DISPLAYSURF.blit(rotatedSurf1, rotatedRect1)
+    while True:   #RK: Start screen loop to check all parameters continuously
+        DISPLAYSURF.fill(BGCOLOR)  #RK: Display the background colour
+        rotatedSurf1 = pygame.transform.rotate(titleSurf1, degrees1) #RK: Use the pygame built in function to rotate the first title by specified number of degrees
+        rotatedRect1 = rotatedSurf1.get_rect()                       #RK: Create a rectangle to make the title an 'image'
+        rotatedRect1.center = (WINDOWWIDTH / 2, WINDOWHEIGHT / 2)    #RK: Make the center of the image the middle of the screen (the point to rotate around)
+        DISPLAYSURF.blit(rotatedSurf1, rotatedRect1)                 #RK: Display the slightly rotated title.
 
         rotatedSurf2 = pygame.transform.rotate(titleSurf2, degrees2)
-        rotatedRect2 = rotatedSurf2.get_rect()
+        rotatedRect2 = rotatedSurf2.get_rect()                       #Repeat the above steps for the second title
         rotatedRect2.center = (WINDOWWIDTH / 2, WINDOWHEIGHT / 2)
         DISPLAYSURF.blit(rotatedSurf2, rotatedRect2)
 
         drawPressKeyMsg()
 
-        if checkForKeyPress():
-            pygame.event.get() # clear event queue
+        if checkForKeyPress(): #RK: Run the function, and if it returns a value, run the following code.
+            pygame.event.get() #RK: Clear the event queue, as the event has been dealt with
             return
-        pygame.display.update()
-        FPSCLOCK.tick(FPS)
-        degrees1 += 3 # rotate by 3 degrees each frame
-        degrees2 += 7 # rotate by 7 degrees each frame
+        pygame.display.update() #RK: Update the pygame display
+        FPSCLOCK.tick(FPS) #RK: Update the framerate
+        degrees1 += 3 #RK: Rotate by 3 degrees each frame
+        degrees2 += 7 #RK: Rotate by 7 degrees each frame
 
 
-def terminate():
-    pygame.quit()
-    sys.exit()
+def terminate():  #RK: A function to be called when wanting to end the game
+    pygame.quit() #RK: Run the built in pygame quit function
+    sys.exit()    #RK: Run the built in sys exit function
+                #RK: The game is terminated and the window is closed.
 
 
 #ML This function generates a random location within the cell.
