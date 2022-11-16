@@ -198,30 +198,30 @@ def drawScore(score):
     scoreRect.topleft = (WINDOWWIDTH - 120, 10) #ML Sets the location of the score display (top left corner)
     DISPLAYSURF.blit(scoreSurf, scoreRect) #Displays the score
 
-
+#ML This function draws the worm
 def drawWorm(wormCoords):
-    for coord in wormCoords:
-        x = coord['x'] * CELLSIZE
-        y = coord['y'] * CELLSIZE
-        wormSegmentRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
-        pygame.draw.rect(DISPLAYSURF, DARKGREEN, wormSegmentRect)
-        wormInnerSegmentRect = pygame.Rect(x + 4, y + 4, CELLSIZE - 8, CELLSIZE - 8)
-        pygame.draw.rect(DISPLAYSURF, GREEN, wormInnerSegmentRect)
+    for coord in wormCoords: #ML When the worm is in the game area,
+        x = coord['x'] * CELLSIZE #ML the length of the worm must be the cellsize
+        y = coord['y'] * CELLSIZE #ML the height of the worm must be the cellsize
+        wormSegmentRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE) #ML defines the size of the outer part of the worm
+        pygame.draw.rect(DISPLAYSURF, DARKGREEN, wormSegmentRect) #ML draws the outer part of the worm (defines colour)
+        wormInnerSegmentRect = pygame.Rect(x + 4, y + 4, CELLSIZE - 8, CELLSIZE - 8) #ML defines the size of the inner part of the worm (slightly small than the outter part)
+        pygame.draw.rect(DISPLAYSURF, GREEN, wormInnerSegmentRect) #ML draws the inner part of the worm (defines colour)
 
 
-def drawApple(coord):
-    x = coord['x'] * CELLSIZE
-    y = coord['y'] * CELLSIZE
-    appleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
-    pygame.draw.rect(DISPLAYSURF, RED, appleRect)
+def drawApple(coord): #ML This function draws an apple
+    x = coord['x'] * CELLSIZE #ML the length of the apple must be the cellsize
+    y = coord['y'] * CELLSIZE #ML the height of the apple must be the cellsize
+    appleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE) #ML defines the size of the apple 
+    pygame.draw.rect(DISPLAYSURF, RED, appleRect) #ML draws the apple (defines colour)
 
 
-def drawGrid():
-    for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
-        pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
-    for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
-        pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y))
+def drawGrid(): #ML This function draws the grid 
+    for x in range(0, WINDOWWIDTH, CELLSIZE): #ML defines the vertical lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT)) #ML draws the vertical lines
+    for y in range(0, WINDOWHEIGHT, CELLSIZE): #ML defines the horizontal lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y)) #ML draws the horizontal lines
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': #ML activates the code if the script is imported 
     main()
