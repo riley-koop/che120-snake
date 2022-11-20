@@ -15,6 +15,10 @@ assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell s
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
 
+clock = pygame.time.Clock()
+timer_interval = 1000
+timer_event = pygame.USEREVENT + 1
+
 #             R    G    B
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
@@ -39,6 +43,7 @@ def main():
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
     pygame.display.set_caption('Wormy')
+    pygame.time.set_timer(timer_event, timer_interval)
 
     showStartScreen()
     while True:
@@ -54,14 +59,20 @@ def runGame():
                   {'x': startx - 1, 'y': starty},
                   {'x': startx - 2, 'y': starty}]
     direction = RIGHT
+    counter = 30
 
     # Start the apple in a random place.
     apple = getRandomLocation()
+    apples=[]
+    ##for i in range(15):
+    ##    apples+= getRandomLocation()
 
     while True: # main game loop
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
                 terminate()
+            elif event.type == timer_event:
+                counter -= 1
             elif event.type == KEYDOWN:
                 if (event.key == K_LEFT or event.key == K_a) and direction != RIGHT:
                     direction = LEFT
@@ -73,6 +84,8 @@ def runGame():
                     direction = DOWN
                 elif event.key == K_ESCAPE:
                     terminate()
+        clock_font = pygame.font.Font('freesansbold.ttf', 18)
+        clock_text = clock_font.render('Time : ' + str(counter), True, WHITE)
 
         # check if the worm has hit itself or the edge
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:
@@ -80,6 +93,9 @@ def runGame():
         for wormBody in wormCoords[1:]:
             if wormBody['x'] == wormCoords[HEAD]['x'] and wormBody['y'] == wormCoords[HEAD]['y']:
                 return # game over
+        if counter == -1:
+            pygame.time.set_timer(timer_event, 0)
+            return
 
         # check if worm has eaten an apply
         if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']:
@@ -103,6 +119,8 @@ def runGame():
         drawWorm(wormCoords)
         drawApple(apple)
         drawScore(len(wormCoords) - 3)
+        clock_rect = clock_text.get_rect(topleft=(0,0))
+        DISPLAYSURF.blit(clock_text, clock_rect)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
