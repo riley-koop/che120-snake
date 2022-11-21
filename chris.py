@@ -2,12 +2,10 @@
 # (Pygame) Lead the green snake around the screen eating red apples.
 
 
-
+import numpy as np
 import random, pygame, sys
 from pygame.locals import *
-numapples=15
-numobstacles=15
-remove=False
+num_Apples=15
 FPS = 15
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
@@ -50,11 +48,8 @@ def main():
     pygame.display.set_caption('Wormy')
     pygame.time.set_timer(timer_event, timer_interval)
 
-    
-
-    
-
     showStartScreen()
+    
     while True:
         runGame()
         showGameOverScreen()
@@ -62,6 +57,7 @@ def main():
 
 def runGame():
     # Set a random start point.
+    
     startx = random.randint(5, CELLWIDTH - 6)
     starty = random.randint(5, CELLHEIGHT - 6)
     wormCoords = [{'x': startx,     'y': starty},
@@ -69,27 +65,21 @@ def runGame():
                   {'x': startx - 2, 'y': starty}]
     direction = RIGHT
     counter = 30
-
     # Start the apple in a random place.
-    applesx=[]
-    applesy=[]
-    obstaclesx=[]
-    obstaclesy=[]
-
-    i=0
-    for i in range(numapples):
-        applesx.insert(len(applesx),random.randint(1, CELLWIDTH-1))
-        applesy.insert(len(applesy),random.randint(1, CELLHEIGHT-1))
-        i+=1
-
-    
-    for i in range(numobstacles):
-        obstaclesx.insert(len(applesx),random.randint(1, CELLWIDTH-1))
-        obstaclesy.insert(len(applesy),random.randint(1, CELLHEIGHT-1))
-        i+=1
     #apple = getRandomLocation()
     
-    
+    applesx=[31,11,24,7,16,4,9,8,19,22,3,27,30,5,13]
+    applesy=[8,19,22,3,27,30,5,13,5,11,24,7,16,4,9]
+    #applesx = np.empty(num_Apples, dtype=int)
+    #applesy = np.empty(num_Apples, dtype=int)
+   
+    #for i in range(num_Apples):
+        #applesx.insert(len(applesx),randomx())
+        #applesy.insert(len(applesy),randomy())
+        #print(applesx)
+        #print(CELLWIDTH)
+        #applesx[i]=randomx()
+        #applesy[i]=randomy()
 
     while True: # main game loop
         for event in pygame.event.get(): # event handling loop
@@ -112,8 +102,11 @@ def runGame():
         clock_text = clock_font.render('Time : ' + str(counter), True, WHITE)
         clock_Rect = clock_text.get_rect()
         clock_Rect.topleft = (10, 10)
+        #DISPLAYSURF.blit(clock_text, clock_Rect)
+        
 
         # check if the worm has hit itself or the edge
+        #print(applesx[1])
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:
             return # game over
         for wormBody in wormCoords[1:]:
@@ -124,30 +117,17 @@ def runGame():
             return
 
         # check if worm has eaten an apply
-        for j in range(len(applesx)):
-            if wormCoords[HEAD]['x'] != applesx[j] or wormCoords[HEAD]['y'] != applesy[j]:
-            # don't remove worm's tail segment
-            #apple = getRandomLocation() # set a new apple somewhere
-                remove=True
-
-            else:
-                print("GROW")
-                remove=False
-                applesx[j]=-1
-                applesy[j]=-1
-                break
-
-        for i in range(len(obstaclesx)):
-            if wormCoords[HEAD]['x'] != obstaclesx[i] or wormCoords[HEAD]['y'] != obstaclesy[i]:
-                None
-            else: return
-                
-
-        print(remove)
-        if remove==True:
-            del wormCoords[-1] # remove worm's tail segment
-            remove=False
-           
+        for i in range(len(applesx)):
+            #print(applesx[i])
+            #print(type(wormCoords[HEAD]['x']), type(applesx[0]))
+            
+            if wormCoords[HEAD]['x'] == applesx[i] and wormCoords[HEAD]['y'] == applesy[i]:
+                print("HELLO")
+                 #don't remove worm's tail segment
+                #applesx[i]=-1
+                #applesy[i]=-1
+           # else:
+                #del wormCoords[-1] # remove worm's tail segment
 
         # move the worm by adding a segment in the direction it is moving
         if direction == UP:
@@ -161,15 +141,10 @@ def runGame():
         wormCoords.insert(0, newHead)
         DISPLAYSURF.fill(BGCOLOR)
         drawWorm(wormCoords)
-        i=0
-        while i<numapples:
-            drawApple(applesx[i], applesy[i])
-            i+=1
-
-        i=0
-        while i<numobstacles:
-            drawObstacle(obstaclesx[i], obstaclesy[i])
-            i+=1
+        for i in range(len(applesx)):
+            if applesx[i]>=0 and applesy[i]>= 0:
+                drawApple(applesx[i], applesy[i])
+        #drawApple(apple)
         drawScore(len(wormCoords) - 3)
         clock_rect = clock_text.get_rect(topleft = (10,10))
         DISPLAYSURF.blit(clock_text, clock_rect)
@@ -179,7 +154,7 @@ def runGame():
 def drawPressKeyMsg():
     pressKeySurf = BASICFONT.render('Press a key to play', True, WHITE)
     pressKeyRect = pressKeySurf.get_rect()
-    pressKeyRect.topleft = (WINDOWWIDTH - 430, WINDOWHEIGHT - 40)
+    pressKeyRect.topleft = (WINDOWWIDTH - 430, WINDOWHEIGHT - 30)
     DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
 
 
@@ -233,6 +208,12 @@ def terminate():
 def getRandomLocation():
     return {'x': random.randint(0, CELLWIDTH - 1), 'y': random.randint(0, CELLHEIGHT - 1)}
 
+def randomx():
+    return random.randint(5, CELLWIDTH - 6)
+
+def randomy():
+    return random.randint(5, CELLHEIGHT - 6)
+
 
 def showGameOverScreen():
     gameOverFont = pygame.font.SysFont('ocraextended', 150)
@@ -258,8 +239,10 @@ def showGameOverScreen():
 def drawScore(score):
     scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE)
     scoreRect = scoreSurf.get_rect()
-    scoreRect.topleft = (WINDOWWIDTH - 100, 10)
+    scoreRect.topleft = (WINDOWWIDTH - 120, 10)
     DISPLAYSURF.blit(scoreSurf, scoreRect)
+
+
 
 
 def drawWorm(wormCoords):
@@ -273,25 +256,17 @@ def drawWorm(wormCoords):
 
 
 def drawApple(coord1, coord2):
-    if coord1!=-1 and coord2!=-1:
-        x = coord1 * CELLSIZE
-        y = coord2 * CELLSIZE
-        appleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
-        pygame.draw.rect(DISPLAYSURF, RED, appleRect)
-
-def drawObstacle(coord1, coord2):
-    if coord1!=-1 and coord2!=-1:
-        x = coord1 * CELLSIZE
-        y = coord2 * CELLSIZE
-        obstacleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
-        pygame.draw.rect(DISPLAYSURF, YELLOW, obstacleRect)
+    x = coord1 
+    y = coord1 
+    appleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
+    pygame.draw.rect(DISPLAYSURF, ACOLOR, appleRect)
 
 
 #def drawGrid():
     #for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
-        #pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
+        #pygame.draw.line(DISPLAYSURF, WHITE, (x, 0), (x, WINDOWHEIGHT))
     #for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
-        #pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y))
+        #pygame.draw.line(DISPLAYSURF, WHITE, (0, y), (WINDOWWIDTH, y))
 
 
 if __name__ == '__main__':
