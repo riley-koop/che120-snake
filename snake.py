@@ -3,7 +3,7 @@
 
 
 
-import random, pygame, sys
+import random, pygame, sys, time
 from pygame.locals import *
 numapples=15
 numobstacles=15
@@ -21,6 +21,8 @@ clock = pygame.time.Clock()
 timer_interval = 1000
 timer_event = pygame.USEREVENT + 1
 
+
+
 #             R    G    B
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
@@ -30,6 +32,7 @@ DARKGREEN = (  0, 155,   0)
 DARKGRAY  = ( 40,  40,  40)
 YELLOW    = (255, 255,   0)
 BLUE      = (  0, 230, 255)
+PURPLE    = (239,   0, 255)
 ACOLOR = YELLOW
 BGCOLOR = BLACK
 
@@ -40,6 +43,7 @@ RIGHT = 'right'
 
 HEAD = 0 # syntactic sugar: index of the worm's head
 
+
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT
 
@@ -49,7 +53,7 @@ def main():
     BASICFONT = pygame.font.SysFont('ocraextended', 18)
     pygame.display.set_caption('Wormy')
     pygame.time.set_timer(timer_event, timer_interval)
-
+    
     
 
     
@@ -75,6 +79,10 @@ def runGame():
     applesy=[]
     obstaclesx=[]
     obstaclesy=[]
+    mover_coords=[0, random.randint(1, CELLHEIGHT-1), 0, random.randint(1, CELLHEIGHT-1), 0, random.randint(1, CELLHEIGHT-1)]
+    moverUpdate= True
+  
+    
 
     i=0
     for i in range(numapples):
@@ -112,6 +120,9 @@ def runGame():
         clock_text = clock_font.render('Time : ' + str(counter), True, WHITE)
         clock_Rect = clock_text.get_rect()
         clock_Rect.topleft = (10, 10)
+        
+            
+
 
         # check if the worm has hit itself or the edge
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:
@@ -131,19 +142,32 @@ def runGame():
                 remove=True
 
             else:
-                print("GROW")
+                
                 remove=False
                 applesx[j]=-1
                 applesy[j]=-1
                 break
 
+        i=0
+        j=1
+        while i<5:
+            if wormCoords[HEAD]['x'] != mover_coords[i] or wormCoords[HEAD]['y'] != mover_coords[j]:
+                j+=2
+                i+=2
+            else: return
+
+
+      
+
         for i in range(len(obstaclesx)):
             if wormCoords[HEAD]['x'] != obstaclesx[i] or wormCoords[HEAD]['y'] != obstaclesy[i]:
                 None
             else: return
+
+        
                 
 
-        print(remove)
+       
         if remove==True:
             del wormCoords[-1] # remove worm's tail segment
             remove=False
@@ -160,6 +184,40 @@ def runGame():
             newHead = {'x': wormCoords[HEAD]['x'] + 1, 'y': wormCoords[HEAD]['y']}
         wormCoords.insert(0, newHead)
         DISPLAYSURF.fill(BGCOLOR)
+        drawGrid()
+        
+        moverUpdate = True
+        i=0
+        j=1
+        while i<5 and moverUpdate==True:
+            if mover_coords[i]<=CELLWIDTH:
+                
+                x = mover_coords[i] * CELLSIZE
+                y = mover_coords[j] * CELLSIZE
+                
+                moverRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
+                pygame.draw.rect(DISPLAYSURF, PURPLE, moverRect)
+                mover_coords[i]+=1
+                print(mover_coords[0])
+                print(mover_coords[2])
+                print(mover_coords[4])
+                
+
+            if mover_coords[i]>=CELLWIDTH:
+                mover_coords[i] = 0
+                mover_coords[j] = random.randint(1, CELLHEIGHT-1)
+
+            if i==4:
+                moverUpdate=False
+
+            
+            j+=2
+            i+=2
+            
+
+                
+
+             
         drawWorm(wormCoords)
         i=0
         while i<numapples:
@@ -287,11 +345,16 @@ def drawObstacle(coord1, coord2):
         pygame.draw.rect(DISPLAYSURF, YELLOW, obstacleRect)
 
 
-#def drawGrid():
-    #for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
-        #pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
-    #for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
-        #pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y))
+def drawGrid():
+    for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
+    for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y))
+
+
+   
+
+   
 
 
 if __name__ == '__main__':
