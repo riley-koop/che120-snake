@@ -198,11 +198,7 @@ def runGame():
                 moverRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
                 pygame.draw.rect(DISPLAYSURF, PURPLE, moverRect)
                 mover_coords[i]+=1
-                print(mover_coords[0])
-                print(mover_coords[2])
-                print(mover_coords[4])
                 
-
             if mover_coords[i]>=CELLWIDTH:
                 mover_coords[i] = 0
                 mover_coords[j] = random.randint(1, CELLHEIGHT-1)
