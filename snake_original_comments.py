@@ -79,10 +79,10 @@ def runGame():      #RK: A new function named 'runGame' is being defined. There 
 
         
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:
-            return              #RK: Check to see if the head of the worm has hit any of the four edges of the map. If the snake is off the map, end the game.
-        for wormBody in wormCoords[1:]:     #RK: A loop to check the coordinates of each piece of the snake body except for the head.
+            return             #RK: Check to see if the head of the worm has hit any of the four edges of the map. If the snake is off the map, end the game.
+        for wormBody in wormCoords[1:]:    #RK: A loop to check the coordinates of each piece of the snake body except for the head.
             if wormBody['x'] == wormCoords[HEAD]['x'] and wormBody['y'] == wormCoords[HEAD]['y']:
-                return          #RK: Check to see if the head of the worm has hit any of the body blocks of the snake. If it has, end the game.
+                return         #RK: Check to see if the head of the worm has hit any of the body blocks of the snake. If it has, end the game.
 
         
         if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']: #RK: Check to see if the head of the worm has hit an apple and is "eating" it.
