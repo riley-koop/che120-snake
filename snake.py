@@ -1,5 +1,4 @@
-# Wormy, by Al Sweigart al@inventwithpython.com
-# (Pygame) Lead the green snake around the screen eating red apples.
+#Created by: Riley Koop, Christopher van der Walt, and Matthieu Lavallee
 
 
 

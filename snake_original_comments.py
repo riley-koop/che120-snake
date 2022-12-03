@@ -1,5 +1,4 @@
-# Wormy, by Al Sweigart al@inventwithpython.com
-# (Pygame) Lead the green snake around the screen eating red apples.
+
 
 # Christopher van der Walt (21011000): CW
 # Riley Koop (21013070): RK
